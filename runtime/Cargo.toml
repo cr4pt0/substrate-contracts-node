@@ -51,10 +51,12 @@ pallet-contracts = { git = "https://github.com/paritytech/substrate", package = 
 pallet-contracts-primitives = { git = "https://github.com/paritytech/substrate", package = "pallet-contracts-primitives", default-features = false , branch = "polkadot-v0.9.29" }
 pallet-contracts-rpc-runtime-api = { git = "https://github.com/paritytech/substrate", package = "pallet-contracts-rpc-runtime-api", default-features = false , branch = "polkadot-v0.9.29" }
 
+pallet-assets = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.29", default-features = false }
+
 [build-dependencies]
 substrate-wasm-builder =  { git = "https://github.com/paritytech/substrate", package = "substrate-wasm-builder" , branch = "polkadot-v0.9.29" }
 
-pallet-assets = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.29", default-features = false }
+
 
 [features]
 default = [
