@@ -319,6 +319,42 @@ impl pallet_contracts::Config for Runtime {
 	type MaxStorageKeyLen = ConstU32<128>;
 }
 
+pub type CurrencyAssetId = u32;
+pub const MILLICENTS: Balance = 10_000_000;
+pub const CENTS: Balance = 1_000 * MILLICENTS; // assume this is worth about a cent.
+pub const DOLLARS: Balance = 100 * CENTS;
+
+pub const EXISTENTIAL_DEPOSIT_ASSETS: u128 = 10 * CENTS; // 0.1 Native Token Balance
+
+pub const fn deposit2(items: u32, bytes: u32) -> Balance {
+	items as Balance * 15 * CENTS + (bytes as Balance) * 6 * CENTS
+}
+parameter_types! {
+    pub const AssetDeposit: Balance = DOLLARS; // 1 UNIT deposit to create asset
+    pub const ApprovalDeposit: Balance = EXISTENTIAL_DEPOSIT_ASSETS;
+    pub const AssetAccountDeposit: Balance = deposit2(1, 16);
+    pub const AssetsStringLimit: u32 = 50;
+    pub const MetadataDepositBase: Balance = deposit2(1, 68);
+    pub const MetadataDepositPerByte: Balance = deposit2(0, 1);
+}
+
+impl pallet_assets::Config for Runtime {
+    type Event = Event;
+    type Balance = Balance;
+    type AssetId = CurrencyAssetId;
+    type Currency = Balances;
+    type ForceOrigin = EnsureRoot<AccountId>;
+    type AssetDeposit = AssetDeposit;
+    type MetadataDepositBase = MetadataDepositBase;
+    type MetadataDepositPerByte = MetadataDepositPerByte;
+    type AssetAccountDeposit = AssetAccountDeposit;
+    type ApprovalDeposit = ApprovalDeposit;
+    type StringLimit = AssetsStringLimit;
+    type Freezer = ();
+    type WeightInfo = ();
+    type Extra = ();
+}
+
 pub struct Migrations;
 impl OnRuntimeUpgrade for Migrations {
 	fn on_runtime_upgrade() -> Weight {
@@ -342,6 +378,7 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		Contracts: pallet_contracts,
+		Assets: pallet_assets,
 	}
 );
 
