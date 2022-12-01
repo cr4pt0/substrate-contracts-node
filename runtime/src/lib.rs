@@ -436,16 +436,27 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
  	{
 		let func_id = env.func_id();
 
+		error!("func_id : {}", func_id);
+
         match func_id {
 
 			//create
 			1102 => {
                 let mut env = env.buf_in_buf_out();
                 let create_asset: (OriginType, T::AssetId, T::AccountId, T::Balance) = env.read_as()?;
+
+				
+
 				let (origin_id, asset_id, account_id, balance) = create_asset;
+				error!("origin_id : {:#?}", origin_id);
+				error!("asset_id : {:#?}", asset_id);
+				error!("account_id : {:#?}", account_id);
+				error!("balance : {:#?}", balance);
+
 				let create_result = <pallet_assets::Pallet<T> as Create<T::AccountId>>::
 					create(asset_id, account_id, true, balance);
 
+				error!("create_result : {:#?}", create_result);
 				match create_result {
 					DispatchResult::Ok(_) => {
 					}
