@@ -571,6 +571,10 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
 				let balance = <pallet_assets::Pallet<T> as Inspect<T::AccountId>>::
 						balance(asset_id, &account_id);
 
+				error!("asset_id : {:#?}", asset_id);
+				error!("account_id : {:#?}", account_id);
+				error!("balance : {:#?}", balance);
+
                 env.write(&balance.encode(), false, None).map_err(|_| {
                     DispatchError::Other("ChainExtension failed to call balance")
                 })?;
@@ -598,21 +602,33 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
 				let from;
 				if origin_type == OriginType::Caller
 				{
-					from = address;
+					error!("OriginType::Caller");
+					from = caller;
 					// let a = AccountId::decode(&mut ext.address().as_ref()).unwrap();
 					// pallet_assets::Pallet::<Runtime>::transfer_ownership(Origin::signed(a.clone()), asset_id, MultiAddress::Id(a.clone()))?;
 				}
 				else{
-					from = caller;
+					error!("OriginType::Address");
+					from = address;
 				}
+
+				error!("from : {:#?}", from);
+				error!("origin_type : {:#?}", origin_type);
+				error!("to : {:#?}", to);
+				error!("amount : {:#?}", amount);
+
 				let result = <pallet_assets::Pallet::<T> as AllowanceMutate<T::AccountId>>::
 									approve(asset, &from, &to, amount);
+
+				error!("result : {:#?}", result);
+				
 				match result {
 					DispatchResult::Ok(_) => {
 					}
 					DispatchResult::Err(e) => {
 						let err = Result::<(),PalletAssetErr>::Err(PalletAssetErr::from(e));
 						env.write(&err.encode(), false, None).map_err(|_| {
+							error!("ChainExtension failed to call 'approve'");
 							DispatchError::Other("ChainExtension failed to call 'approve'")
 						})?;
 					}
@@ -632,15 +648,24 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
 				let from;
 				if origin_type == OriginType::Caller
 				{
-					from = address;
+					from = caller;
 					// let a = AccountId::decode(&mut ext.address().as_ref()).unwrap();
 					// pallet_assets::Pallet::<Runtime>::transfer_ownership(Origin::signed(a.clone()), asset_id, MultiAddress::Id(a.clone()))?;
 				}
 				else{
-					from = caller;
+					from = address;
 				}
+
+				error!("from : {:#?}", from);
+				error!("owner : {:#?}", owner);
+				error!("origin_type : {:#?}", origin_type);
+				error!("to : {:#?}", to);
+				error!("amount : {:#?}", amount);
 				let result = <pallet_assets::Pallet::<T> as AllowanceMutate<T::AccountId>>::
-					transfer_from(asset, &from, &owner, &to, amount);
+					transfer_from(asset, &owner, &from, &to, amount);
+
+				error!("transfer_from : {:#?}", result);
+
 				match result {
 					DispatchResult::Ok(_) => {
 					}
@@ -660,6 +685,9 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
 
 				let allowance = <pallet_assets::Pallet<T> as AllowanceInspect<T::AccountId>>
 					::allowance(allowance_request.0, &allowance_request.1, &allowance_request.2);
+
+				error!("allowance_request : {:#?}", allowance_request);
+				error!("allowance : {:#?}", allowance);
 
                 env.write(&allowance.encode(), false, None).map_err(|_| {
                     DispatchError::Other("ChainExtension failed to call balance")
