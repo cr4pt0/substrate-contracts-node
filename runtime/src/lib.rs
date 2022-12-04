@@ -539,17 +539,23 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
 				let address_account;
 				if origin_id == OriginType::Caller
 				{
-					address_account = address;
+					address_account = caller;
 					// let a = AccountId::decode(&mut ext.address().as_ref()).unwrap();
 					// pallet_assets::Pallet::<Runtime>::transfer_ownership(Origin::signed(a.clone()), asset_id, MultiAddress::Id(a.clone()))?;
 				}
 				else{
-					address_account = caller;
+					address_account = address;
 				}
+
+				error!("asset_id : {:#?}", asset_id);
+				error!("address_account : {:#?}", address_account);
+				error!("account_id : {:#?}", account_id);
+				error!("balance : {:#?}", balance);
 				
 				let result = <pallet_assets::Pallet<T> as Transfer<T::AccountId>>::
 					transfer(asset_id, &address_account, &account_id, balance, true);
 
+				error!("result : {:#?}", result);
 
 				// match result {
 				// 	DispatchResult::Ok(_) => {},
