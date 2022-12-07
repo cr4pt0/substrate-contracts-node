@@ -833,6 +833,34 @@ impl<T> ChainExtension<T> for Psp22AssetExtension
         true
     }
 }
+
+
+/*
+
+		#[ink(message,selector = 0x70a08231)]
+        pub fn balance(&self, account : AccountId) -> [u128; 2] {
+            let b = self.balance_of(account);
+            use ethnum::U256;
+            let balance_u256: U256 = U256::try_from(b).unwrap();
+            balance_u256.0
+        }
+
+        #[ink(message,selector = 0x23b872dd)]
+        pub fn transfertransferfrom(&mut self, from : AccountId, to : AccountId, amount : [u128; 2]) {
+            use ethnum::U256;
+            let amount : u128 = U256(amount).try_into().unwrap();
+            self.transfer_from(from, to, amount, Vec::<u8>::new()).expect("should transfer from");
+        }
+
+        #[ink(message,selector = 0xa9059cbb)]
+        pub fn transfertransfer(&mut self, to : AccountId, amount : [u128; 2]) {
+            use ethnum::U256;
+            let amount : u128 = U256(amount).try_into().unwrap();
+            self.transfer(to, amount, Vec::<u8>::new()).expect("should transfer");
+        }
+
+*/
+
 /*____________________________________________________________________________________________________*/
 
 
